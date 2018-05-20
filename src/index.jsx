@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 import YTSearch from 'youtube-api-search';
@@ -33,9 +34,12 @@ class App extends Component {
   }
   
   render() {
+    // Using lodash to run videoSearch only in 300 ms, no matter how many times input change.
+    const videoSearch = _.debounce((text) => {this.videoSearch(text)}, 300);
+
     return (
       <div>
-        <SearchBar onSearchInputChange={ newText => this.videoSearch(newText) }/>
+        <SearchBar onSearchInputChange={ videoSearch }/>
         <VideoDetail video={ this.state.selectedVideo } />
         <VideoList
           onVideoSelect={ clickedVideo => this.setState({ selectedVideo: clickedVideo }) }
